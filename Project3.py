@@ -9,6 +9,7 @@ import pandas as pd
 class Neuron():
     def __init__(self, degree):
         self.degree = degree
+        self.initialize_weights()
 
     # for every term in polynomial assign a random weight between 1 and 0
     def initialize_weights(self):
@@ -23,18 +24,20 @@ class Neuron():
             sum = sum + self.weights[i]*x**i
         return sum
 
-    def output(x, k):
+    def output(self,x, k):
         return k*self.net(x)
 
-    def perc_learn(inp,out):
-        alpha = 0.1
-        iterations = 1000
+    def perc_learn(self,inp,out):
+        alpha = 0.5
+        iterations = 10000
         count = 0
         while iterations > count:
-            for i in range(inp):
-                delta_w = alpha*inp[i]*(self.output(inp[i], 1) - out[i])
+            for i in range(len(inp)):
+                delta_w = []
+                for w in range(len(self.weights)):
+                    delta_w.append(alpha*(inp[i]**w)*(out[i]-self.output(inp[i],1)))
                 for j in range(len(self.weights)):
-                    self.weights[j] == self.weights[j] + delta_w
+                    self.weights[j] = self.weights[j] + delta_w[j]
             count = count + 1
 def calc_TE(neuron, inp, out):
     te = 0
