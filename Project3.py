@@ -17,7 +17,7 @@ class Neuron():
         w = []
         for i in range(self.degree + 1):
             #w.append(np.random.randint(-100,100))
-            w.append(0)
+            w.append(1)
         self.weights = w
 
     def net(self,x):
@@ -30,8 +30,8 @@ class Neuron():
         return k*self.net(x)
 
     def perc_learn(self,inp,out):
-        alpha = 0.5
-        iterations = 10000
+        alpha = 0.4
+        iterations = 50000
         count = 0
         te = 1000
         while te > 0.05 and count < iterations:
@@ -72,6 +72,7 @@ def create_plt(neuron, inp, out, title):
     fig.savefig(title + ".png")
 
 def main():
+
     train_files = ["train_norm1.csv", "train_norm2.csv", "train_norm3.csv"]
     test_file = "test_norm.csv"
     neurons = [Neuron(1),Neuron(2),Neuron(3)]
@@ -94,16 +95,15 @@ def main():
             total_out.append(out)
 
             te = n.perc_learn(inp,out)
-            print("Total error for neuron " + neuron_names[count] + " was " + str(te) + " for " + train_files[i])
+            print("Total error for neuron " + neuron_names[count] + " was " + str(round(te,4)) + " for " + train_files[i])
             print("\n")
         test_te = n.calc_TE(test_inp, test_out)
-        print("Total error for neuron " + neuron_names[count] + " was " + str(test_te) + " for the testing data")
+        print("Total error for neuron " + neuron_names[count] + " was " + str(round(test_te,4)) + " for the testing data")
 
         title_base = "Neuron " + neuron_names[count]
         create_plt(n, np.array(read_csv(train_files[0])[0]), total_out, (title_base + " with train data"))
         create_plt(n, np.array(read_csv(train_files[0])[0]), [(test_out)], (title_base + " with test data"))
         count+=1
-
 
 
 if __name__=='__main__':
